@@ -18,23 +18,34 @@ exports.create = (req, res) => {
             message: "password can not be empty"
         });
     }
+//check email already exists in database
+User.find({email:req.body.email}).then(data=>{
+    if(data.length!=0){
+        console.log(data)
+        res.json({error:"Email Already Registered"})
+    }
+   
+    else{
+  // Create a User
+  const user = new User({
+    fullname: req.body.fullname, 
+    email: req.body.email,
+    password:req.body.password
+});
 
-    // Create a User
-    const user = new User({
-        fullname: req.body.fullname, 
-        email: req.body.email,
-        password:req.body.password
+// Save User in the database
+user.save()
+.then(data => {
+    res.send(data);
+}).catch(err => {
+    res.status(500).send({
+        message: err.message || "Some error occurred while creating the User."
     });
+});
+    }
+})
 
-    // Save User in the database
-    user.save()
-    .then(data => {
-        res.send(data);
-    }).catch(err => {
-        res.status(500).send({
-            message: err.message || "Some error occurred while creating the User."
-        });
-    });
+  
 };
 
 
