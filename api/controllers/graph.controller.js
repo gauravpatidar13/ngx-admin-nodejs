@@ -85,7 +85,7 @@ exports.deleteOne=(req,res)=>{
                 });
             }
             else if(graph.n==1)
-            res.send({msg:"graph deleted successfully"});
+            res.send(req.params.id);
             else
             res.send({msg:"graph not found with id"})
         }).catch(err => {
@@ -103,7 +103,7 @@ exports.updateOne=(req,res)=>{
                     message: "graph not updated"
                 });
             }
-            res.json({msg:"graph updated successfully"});
+            res.send(req.body);
         }).catch(err => {
 
             return res.status(500).send({

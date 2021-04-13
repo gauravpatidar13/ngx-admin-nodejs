@@ -90,7 +90,7 @@ exports.updateOne = (req, res) => {
                     message: "contact not updated"
                 });
             }
-            res.json({msg:"contact updated successfully"});
+            res.send(req.body);
         }).catch(err => {
 
             return res.status(500).send({
@@ -108,7 +108,7 @@ exports.deleteOne = (req, res) => {
                 });
             }
             else if(contact.n==1)
-            res.send({msg:"contact deleted successfully"});
+            res.send(req.params.id);
             else
             res.send({msg:"contact not found with id"})
         }).catch(err => {
