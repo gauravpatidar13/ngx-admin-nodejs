@@ -20,8 +20,11 @@ exports.findAll = (req, res) => {
 };
 
 exports.insertOne = (req, res) => {
-    this.validateContact(req, res)
-    Contact.collection.insertOne(req.body)
+    this.validateContact(req, res);
+    
+};
+exports.saveContact=(req,res)=>{
+ let contactObj=new Contact(req.body).save()
         .then(contact => {
             if (!contact) {
                 return res.status(404).send({
@@ -35,8 +38,7 @@ exports.insertOne = (req, res) => {
                 message: "Error contact not created"
             });
         });
-};
-
+}
 exports.validateContact = (req, res) => {
     // Validate Contact data
     if (!req.body.id) {
@@ -61,8 +63,10 @@ exports.validateContact = (req, res) => {
         });
     }
     else {
-        contact.collection.find().then(contacts => {
+    
+        Contact.find().then(contacts => {
             if (!contacts) {
+           this.saveContact(req,res);    
             }
             else if (contacts.length > 0) {
                 for (let i = 0; i < contacts.length; i++) {
@@ -72,20 +76,21 @@ exports.validateContact = (req, res) => {
                         });
                     }
                 }
+           this.saveContact(req,res);
+
             }
         })
     }
 };
-
 exports.updateOne = (req, res) => {
-    Contact.collection.updateOne({ id: req.body.id }, req.body)
+    Contact.updateOne({ id: req.body.id }, req.body)
         .then(contact => {
             if (!contact) {
                 return res.status(404).send({
                     message: "contact not updated"
                 });
             }
-            res.send(contact);
+            res.json({msg:"contact updated successfully"});
         }).catch(err => {
 
             return res.status(500).send({
@@ -95,14 +100,17 @@ exports.updateOne = (req, res) => {
 };
 
 exports.deleteOne = (req, res) => {
-    Contact.collection.deleteOne({ id: req.params.id })
+    Contact.deleteOne({ id: req.params.id })
         .then(contact => {
             if (!contact) {
                 return res.status(404).send({
                     message: "contact not deleted"
                 });
             }
-            res.send(contact);
+            else if(contact.n==1)
+            res.send({msg:"contact deleted successfully"});
+            else
+            res.send({msg:"contact not found with id"})
         }).catch(err => {
 
             return res.status(500).send({

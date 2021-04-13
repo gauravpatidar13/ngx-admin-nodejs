@@ -61,7 +61,7 @@ exports.validateGraph = (req, res) => {
         });
     }
     else {
-        graph.collection.find().then(graph => {
+        Graph.find().then(graph => {
             if (!graph) {
             }
             else if (graph.length > 0) {
@@ -76,3 +76,38 @@ exports.validateGraph = (req, res) => {
         })
     }
 };
+exports.deleteOne=(req,res)=>{
+     Graph.deleteOne({ id: req.params.id })
+        .then(graph => {
+            if (!graph) {
+                return res.status(404).send({
+                    message: "graph not deleted"
+                });
+            }
+            else if(graph.n==1)
+            res.send({msg:"graph deleted successfully"});
+            else
+            res.send({msg:"graph not found with id"})
+        }).catch(err => {
+
+            return res.status(500).send({
+                message: "Error graph not deleted"
+            });
+        });
+}
+exports.updateOne=(req,res)=>{
+   Graph.updateOne({ id: req.body.id }, req.body)
+        .then(graph => {
+            if (!graph) {
+                return res.status(404).send({
+                    message: "graph not updated"
+                });
+            }
+            res.json({msg:"graph updated successfully"});
+        }).catch(err => {
+
+            return res.status(500).send({
+                message: "Error graph not updated"
+            });
+        }); 
+}
