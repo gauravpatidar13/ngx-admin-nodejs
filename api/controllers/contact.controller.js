@@ -41,6 +41,7 @@ exports.saveContact=(req,res)=>{
 }
 exports.validateContact = (req, res) => {
     // Validate Contact data
+    console.log('validate contact')
     if (!req.body.id) {
         return res.status(400).send({
             message: "id can not be empty"
@@ -65,6 +66,7 @@ exports.validateContact = (req, res) => {
     else {
     
         Contact.find().then(contacts => {
+            console.log(contacts)
             if (!contacts) {
            this.saveContact(req,res);    
             }
@@ -78,6 +80,9 @@ exports.validateContact = (req, res) => {
                 }
            this.saveContact(req,res);
 
+            }
+            else if(contacts.length==0){
+                this.saveContact(req,res);
             }
         })
     }

@@ -96,6 +96,7 @@ exports.deleteOne=(req,res)=>{
         });
 }
 exports.updateOne=(req,res)=>{
+    console.log(req.body)
    Graph.updateOne({ id: req.body.id }, req.body)
         .then(graph => {
             if (!graph) {
